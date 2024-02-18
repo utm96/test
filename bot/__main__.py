@@ -1,8 +1,6 @@
 # from connector.telegram_connector import send_message_tele
 from analysis.bot import *
-# send_message_tele('test')
-from multiprocessing import Pool
-import threading
+
 
 NUMBER_THREAD = 8
 def split(a, n):
@@ -19,26 +17,20 @@ list_symbol = list_symbol_string.split(',')
 
 
 # list_symbol_pass = dict()
-# for symbol in list_symbol:
-#     symbol = symbol.strip()
-#     week_criteria = check_week(symbol)
-#     if week_criteria:
-#         list_symbol_pass.append(symbol)
-# with Pool(5) as p:
-#     print(p.map(check_week, list_symbol))
-# p = Process(target=check_week, args=list_symbol)
-# p.start()
-# list_symbol_pass = p.join()
-threads = []
-
-for i in range(5):
-    t = threading.Thread(target=check_week, args=(i,))
-    threads.append(t)
-    t.start()
+list_symbol_pass = []
+for symbol in list_symbol:
+    symbol = symbol.strip()
+    week_criteria = check_week(symbol)
+    if week_criteria:
+        list_symbol_pass.append(symbol)
+# for i in range(5):
+#     t = threading.Thread(target=check_week, args=(i,))
+#     threads.append(t)
+#     t.start()
 # Waiting for all threads to complete
-for t in threads:
-    t.join()
-print("All tasks completed")
+# for t in threads:
+#     t.join()
+# print("All tasks completed")
 
 list_symbol_pass_volume =[]
 for symbol in list_symbol_pass:
@@ -51,3 +43,5 @@ for symbol in list_symbol_pass_volume:
     money_flow = check_money_flow(symbol)
     if len(money_flow) >=10:
         list_symbol_has_money.append(symbol)
+
+print(list_symbol_has_money)
