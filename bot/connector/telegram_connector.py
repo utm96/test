@@ -1,7 +1,7 @@
 import telebot
 from common.helper import read_config
 
-config = read_config('configurations.ini')
+config = read_config('./configurations.ini')
 
 BOT_KEY = config['telegram']['BOT_KEY']
 CHAT_ID = config['telegram']['CHAT_ID']
