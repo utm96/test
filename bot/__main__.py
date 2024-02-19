@@ -21,10 +21,13 @@ list_symbol = list_symbol_string.split(',')
 # list_symbol_pass = dict()
 list_symbol_pass = []
 for symbol in list_symbol:
-    symbol = symbol.strip()
-    week_criteria = check_week(symbol)
-    if week_criteria:
-        list_symbol_pass.append(symbol)
+    try:
+        symbol = symbol.strip()
+        week_criteria = check_week(symbol)
+        if week_criteria:
+            list_symbol_pass.append(symbol)
+    except:
+        pass
 # for i in range(5):
 #     t = threading.Thread(target=check_week, args=(i,))
 #     threads.append(t)
@@ -36,15 +39,20 @@ for symbol in list_symbol:
 
 list_symbol_pass_volume =[]
 for symbol in list_symbol_pass:
-    volume_criteria = check_volume_day(symbol)
-    if volume_criteria < 1:
-        list_symbol_pass_volume.append(symbol)
-
+    try:
+        volume_criteria = check_volume_day(symbol)
+        if volume_criteria < 1:
+            list_symbol_pass_volume.append(symbol)
+    except:
+        pass
 list_symbol_has_money = []
 for symbol in list_symbol_pass_volume:
-    money_flow = check_money_flow(symbol)
-    if len(money_flow) >=10:
-        list_symbol_has_money.append(symbol)
+    try:
+        money_flow = check_money_flow(symbol)
+        if len(money_flow) >=10:
+            list_symbol_has_money.append(symbol)
+    except:
+        pass
 
 # print(list_symbol_has_money)
 send_message_tele('list\'s size=' +str(len(list_symbol_has_money)) +": "  + '\n'.join(list_symbol_has_money))
