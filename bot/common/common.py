@@ -1,4 +1,5 @@
 import pandas as pd
+import pandas_ta as ta
 
 
 def check_candle_buy(record):
@@ -19,6 +20,10 @@ def check_candle_buy(record):
 
 def calculate_ma(data, n):
     ma = pd.Series(data).rolling(n).mean()
+    return ma.to_numpy()
+
+def calculate_ema(data, n):
+    ma = ta.ema(data, length=n)
     return ma.to_numpy()
 
 

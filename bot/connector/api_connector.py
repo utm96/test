@@ -3,6 +3,7 @@ import requests
 # from io import BytesIO
 from datetime import datetime
 import pandas as pd
+import json
 
 tcbs_headers = {
   'sec-ch-ua': '"Google Chrome";v="119", "Chromium";v="119", "Not?A_Brand";v="24"',
@@ -57,3 +58,13 @@ def ohlc_data (symbol='REE', start_date='2023-01-01',
             return df
 #         return data
     return None
+
+
+def get_token (payload = None):
+    url = "https://apipub.tcbs.com.vn/authen/v1/login"
+    headers = {
+    'Content-Type': 'application/json'
+    }
+
+    response = requests.request("POST", url, headers=headers, data=payload,verify=False)
+    return response.json()['token']
