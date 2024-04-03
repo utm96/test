@@ -6,7 +6,7 @@ def check_money_flow(symbol):
     money_flow = []
     today = date.today()
     sixty_days_ago = today - timedelta(days=90)
-    symbol_data = ohlc_data(symbol = symbol,start_date=str(sixty_days_ago),end_date = str(today),resolution ='5')
+    symbol_data = ohlc_data(symbol = symbol,start_date=str(sixty_days_ago),end_date = str(today+ timedelta(days=1)),resolution ='5')
     if symbol_data is None:
         return False
     vol_ma = calculate_ma(symbol_data['volume'], 500)
@@ -21,7 +21,7 @@ def check_money_flow(symbol):
 def check_volume_day(symbol):
     today = date.today()
     sixty_days_ago = today - timedelta(days=60)
-    symbol_data = ohlc_data(symbol = symbol,start_date=str(sixty_days_ago),end_date = str(today),resolution ='D')
+    symbol_data = ohlc_data(symbol = symbol,start_date=str(sixty_days_ago),end_date = str(today + timedelta(days=1)),resolution ='D')
     if symbol_data is None:
         return False
     ma20_volume = calculate_ma(symbol_data['volume'], 20)
@@ -32,7 +32,7 @@ def check_volume_day(symbol):
 def check_week(symbol):
     today = date.today()
     start_days = today - timedelta(days=300)
-    symbol_data = ohlc_data(symbol = symbol,start_date=str(start_days),end_date = str(today),resolution ='W')
+    symbol_data = ohlc_data(symbol = symbol,start_date=str(start_days),end_date = str(today+ timedelta(days=1)),resolution ='W')
 
     if symbol_data is None:
         return False
@@ -44,7 +44,7 @@ def check_week(symbol):
 def check_sell(symbol):
     today = date.today()
     sixty_days_ago = today - timedelta(days=60)
-    symbol_data = ohlc_data(symbol = symbol,start_date=str(sixty_days_ago),end_date = str(today),resolution ='D')
+    symbol_data = ohlc_data(symbol = symbol,start_date=str(sixty_days_ago),end_date = str(today+ timedelta(days=1)),resolution ='D')
     if symbol_data is None:
         return False
     ma20_volume = calculate_ma(symbol_data['volume'], 20)
@@ -62,7 +62,7 @@ def check_sell(symbol):
 def check_strong_stock(symbol):
     today = date.today()
     four_years_ago = today - timedelta(days=465)
-    symbol_data = ohlc_data(symbol = symbol,start_date=str(four_years_ago),end_date = str(today),resolution ='D')
+    symbol_data = ohlc_data(symbol = symbol,start_date=str(four_years_ago),end_date = str(today+ timedelta(days=1)),resolution ='D')
     if symbol_data is None:
         return False
     current_price = symbol_data['close'].iloc[-1]
