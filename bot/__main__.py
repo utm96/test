@@ -1,6 +1,6 @@
 from connector.telegram_connector import send_message_tele
 from analysis.bot import *
-from connector.api_connector import get_token
+from connector.api_connector import get_token,get_list_stock
 import json
 from common.helper import read_config
 from collections import defaultdict 
@@ -15,12 +15,15 @@ def split(a, n):
 import platform
 import time
 def beautify_list_rated_symbol(list_rated_symbol):
-    result = " "
+    result = ""
+    count = 0 
     for rating, symbols in list_rated_symbol.items():
+        count += len(symbols)
         result += f"Hang ngon {rating}* (size: {len(symbols)}):\n"
         for symbol in symbols:
             result += f"{symbol}\n"
         result += "\n"  # Add an empty line after each rating
+    result = f"Tong so luong ma ({count}) \n {result}"
     return result
 
 
@@ -56,11 +59,14 @@ if (os_name != 'Windows') :
         except:
             pass
     list_symbol_strong = []
+    list_symbol_trading = []
     for symbol in list_symbol_has_money:
         try:
             is_strong = check_strong_stock(symbol)
             if is_strong :
                 list_symbol_strong.append(symbol)
+            elif trading_symbol(symbol):
+                list_symbol_trading.append(symbol)
         except:
             pass
     list_rated_symbol = defaultdict(list) 
@@ -70,20 +76,65 @@ if (os_name != 'Windows') :
             list_rated_symbol[rating].append(symbol)
         except:
             pass
-# print(list_symbol_has_money)
-    # print(beautify_list_rated_symbol(list_rated_symbol))
     send_message_tele(beautify_list_rated_symbol(list_rated_symbol))
+    send_message_tele("Lieu an nhieu (Co the quan sat bat day) " + '\n'.join(list_symbol_trading))
 
 else :
-    config = read_config('./configurations.ini')
+    # trading_symbol('VHC')
 
-    user = config['tcbs']['USER']
-    password= config['tcbs']['PASS']
-    payload = json.dumps({
-        "username": user,
-        "password": password
-    })
-    print(get_token(payload))
-    send_message_tele('helele')
-    time.sleep(5)
+    # config = read_config('./configurations.ini')
+    # hold_list = []
+    # user = config['tcbs']['USER']
+    # password= config['tcbs']['PASS']
+    # url= config['tcbs']['URL']
+
+    # payload = json.dumps({
+    #     "username": user,
+    #     "password": password
+    # })
+    # token = get_token(payload)
+    # print(token)
+    # list_stock = get_list_stock(token,url)
+    # # list_stock = {'stock':[{'symbol' : 'IDC'},{'symbol' : 'VCG'},{'symbol' : 'VGC'},{'symbol' : 'PVD'},{'symbol' : 'DCM'}]}
+
+    # for symbol in list_stock['stock']:
+    #     hold_list.append(symbol['symbol'])
+    # list_symbol_sell = []
+    # for symbol in hold_list:
+    #     symbol = symbol.strip()
+    #     check_sell_result = check_sell(symbol)
+    #     if check_sell_result:
+    #         list_symbol_sell.append(symbol)
+    # # print(list_stock)
+    # send_message_tele('Danh sach ma dang cam: \n' + '\n'.join(hold_list) +
+    #                  f'\n Danh sach khuyen nghi ban ({len(list_symbol_sell)}): \n' + '\n'.join(list_symbol_sell))
+    
+
+
+    # config = read_config('./configurations.ini')
+    # hold_list_bot = []
+    # user_bot = config['tcbs-bot']['USER']
+    # password_bot= config['tcbs-bot']['PASS']
+    # url_bot= config['tcbs-bot']['URL']
+
+    # payload_bot = json.dumps({
+    #     "username": user_bot,
+    #     "password": password_bot
+    # })
+    # token_bot = get_token(payload_bot)
+    # print(token_bot)
+    # list_stock_bot = get_list_stock(token_bot,url_bot)
+    # # list_stock = {'stock':[{'symbol' : 'IDC'},{'symbol' : 'VCG'},{'symbol' : 'VGC'},{'symbol' : 'PVD'},{'symbol' : 'DCM'}]}
+
+    # for symbol in list_stock_bot['stock']:
+    #     hold_list_bot.append(symbol['symbol'])
+    # list_symbol_sell_bot = []
+    # for symbol in hold_list_bot:
+    #     symbol = symbol.strip()
+    #     check_sell_result = check_sell(symbol)
+    #     if check_sell_result:
+    #         list_symbol_sell_bot.append(symbol)
+    # # print(list_stock)
+    # send_message_tele('Danh sach ma BOT dang cam: \n' + '\n'.join(hold_list_bot) +
+    #                  f'\n Danh sach khuyen nghi ban ({len(list_symbol_sell_bot)}): \n' + '\n'.join(list_symbol_sell_bot))
 

@@ -29,7 +29,7 @@ def check_volume_day_and_can_buy(symbol):
     ema5 = calculate_ema(symbol_data['close'], 5)
     high_current_price = symbol_data['high'].iloc[-1]
 #     if(ma20_volume[-1] <= symbol_data['volume'].iloc[-1] ):
-    return symbol_data['volume'].iloc[-1] < ma20_volume[-1] and high_current_price > ema5[-1] and high_current_price > ema9[-1]
+    return symbol_data['volume'].iloc[-1] < ma20_volume[-1] and (high_current_price > ema5[-1] or high_current_price > ema9[-1])
 
 def squeez_on(symbol):
     today = date.today()
@@ -119,3 +119,15 @@ def check_strong_stock(symbol):
 
 # #     if(ma20_volume[-1] <= symbol_data['volume'].iloc[-1] ):
 #     return ma200[-1] < ma100[-1] < ma50[-1] < ma20[-1] and current_price > ma50[-1]
+
+
+def trading_symbol(symbol):
+    today = date.today()
+    four_years_ago = today - timedelta(days=60)
+    symbol_data = ohlc_data(symbol = symbol,start_date=str(four_years_ago),end_date = str(today+ timedelta(days=1)),resolution ='D')
+    if symbol_data is None:
+        return False
+    return wt_lb(symbol_data)
+
+#     if(ma20_volume[-1] <= symbol_data['volume'].iloc[-1] ):
+    # return ma200[-1] < ma100[-1] < ma50[-1] < ma20[-1] and current_price > ma50[-1]

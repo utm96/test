@@ -25,6 +25,19 @@ def calculate_ma(data, n):
 def calculate_ema(data, n):
     ma = ta.ema(data, length=n)
     return ma.to_numpy()
+def wt_lb(data):
+    n1 =10
+    n2 = 21
+    ap = (data['high'] + data['low'] + data['close'])/3 
+    esa = calculate_ema(ap, n1)
+    d = calculate_ema(abs(ap - esa), n1)
+    ci = (ap - esa) / (0.015 * d)
+    tci = calculate_ema(ci, n2)
+    wt1 = tci
+    wt2 = calculate_ma(wt1,4)
+    wt = wt1 - wt2
+    return wt2[-1] < 0 and wt1[-1] < 0 and wt[-1] >= -6
+
 
 
 

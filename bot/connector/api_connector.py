@@ -68,3 +68,15 @@ def get_token (payload = None):
 
     response = requests.request("POST", url, headers=headers, data=payload,verify=False)
     return response.json()['token']
+
+def get_list_stock (token, url):
+    # url = "https://apiext.tcbs.com.vn/hft-krema/v1/accounts/0001698153/se"    
+    headers = {
+    'Authorization': f'Bearer {token}' 
+    }
+    payload = {}
+
+    response = requests.request("GET", url, headers=headers, data=payload)
+
+    print(response)
+    return response.json()
