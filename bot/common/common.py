@@ -36,7 +36,7 @@ def wt_lb(data):
     wt1 = tci
     wt2 = calculate_ma(wt1,4)
     wt = wt1 - wt2
-    return wt2[-1] < 0 and wt1[-1] < 0 and wt[-1] >= -6
+    return wt2[-1] < 0 and wt1[-1] < 0 and wt[-1] >= -8 and  wt[-1] > wt[-2]
 
 
 
