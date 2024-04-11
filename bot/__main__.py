@@ -80,61 +80,60 @@ if (os_name != 'Windows') :
     send_message_tele("Lieu an nhieu (Co the quan sat bat day) " + '\n'.join(list_symbol_trading))
 
 else :
-    # trading_symbol('VHC')
 
-    # config = read_config('./configurations.ini')
-    # hold_list = []
-    # user = config['tcbs']['USER']
-    # password= config['tcbs']['PASS']
-    # url= config['tcbs']['URL']
+    config = read_config('./configurations.ini')
+    hold_list = []
+    user = config['tcbs']['USER']
+    password= config['tcbs']['PASS']
+    url= config['tcbs']['URL']
 
-    # payload = json.dumps({
-    #     "username": user,
-    #     "password": password
-    # })
-    # token = get_token(payload)
-    # print(token)
-    # list_stock = get_list_stock(token,url)
-    # # list_stock = {'stock':[{'symbol' : 'IDC'},{'symbol' : 'VCG'},{'symbol' : 'VGC'},{'symbol' : 'PVD'},{'symbol' : 'DCM'}]}
+    payload = json.dumps({
+        "username": user,
+        "password": password
+    })
+    token = get_token(payload)
+    print(token)
+    list_stock = get_list_stock(token,url)
+    # list_stock = {'stock':[{'symbol' : 'IDC'},{'symbol' : 'VCG'},{'symbol' : 'VGC'},{'symbol' : 'PVD'},{'symbol' : 'DCM'}]}
 
-    # for symbol in list_stock['stock']:
-    #     hold_list.append(symbol['symbol'])
-    # list_symbol_sell = []
-    # for symbol in hold_list:
-    #     symbol = symbol.strip()
-    #     check_sell_result = check_sell(symbol)
-    #     if check_sell_result:
-    #         list_symbol_sell.append(symbol)
-    # # print(list_stock)
-    # send_message_tele('Danh sach ma dang cam: \n' + '\n'.join(hold_list) +
-    #                  f'\n Danh sach khuyen nghi ban ({len(list_symbol_sell)}): \n' + '\n'.join(list_symbol_sell))
+    for symbol in list_stock['stock']:
+        hold_list.append(symbol['symbol'])
+    list_symbol_sell = []
+    for symbol in hold_list:
+        symbol = symbol.strip()
+        check_sell_result = check_sell(symbol)
+        if check_sell_result:
+            list_symbol_sell.append(symbol)
+    # print(list_stock)
+    send_message_tele('Danh sach ma dang cam: \n' + '\n'.join(hold_list) +
+                     f'\n Danh sach khuyen nghi ban ({len(list_symbol_sell)}): \n' + '\n'.join(list_symbol_sell))
     
 
 
-    # config = read_config('./configurations.ini')
-    # hold_list_bot = []
-    # user_bot = config['tcbs-bot']['USER']
-    # password_bot= config['tcbs-bot']['PASS']
-    # url_bot= config['tcbs-bot']['URL']
+    config = read_config('./configurations.ini')
+    hold_list_bot = []
+    user_bot = config['tcbs-bot']['USER']
+    password_bot= config['tcbs-bot']['PASS']
+    url_bot= config['tcbs-bot']['URL']
 
-    # payload_bot = json.dumps({
-    #     "username": user_bot,
-    #     "password": password_bot
-    # })
-    # token_bot = get_token(payload_bot)
-    # print(token_bot)
-    # list_stock_bot = get_list_stock(token_bot,url_bot)
-    # # list_stock = {'stock':[{'symbol' : 'IDC'},{'symbol' : 'VCG'},{'symbol' : 'VGC'},{'symbol' : 'PVD'},{'symbol' : 'DCM'}]}
+    payload_bot = json.dumps({
+        "username": user_bot,
+        "password": password_bot
+    })
+    token_bot = get_token(payload_bot)
+    print(token_bot)
+    list_stock_bot = get_list_stock(token_bot,url_bot)
+    # list_stock = {'stock':[{'symbol' : 'IDC'},{'symbol' : 'VCG'},{'symbol' : 'VGC'},{'symbol' : 'PVD'},{'symbol' : 'DCM'}]}
 
-    # for symbol in list_stock_bot['stock']:
-    #     hold_list_bot.append(symbol['symbol'])
-    # list_symbol_sell_bot = []
-    # for symbol in hold_list_bot:
-    #     symbol = symbol.strip()
-    #     check_sell_result = check_sell(symbol)
-    #     if check_sell_result:
-    #         list_symbol_sell_bot.append(symbol)
-    # # print(list_stock)
-    # send_message_tele('Danh sach ma BOT dang cam: \n' + '\n'.join(hold_list_bot) +
-    #                  f'\n Danh sach khuyen nghi ban ({len(list_symbol_sell_bot)}): \n' + '\n'.join(list_symbol_sell_bot))
+    for symbol in list_stock_bot['stock']:
+        hold_list_bot.append(symbol['symbol'])
+    list_symbol_sell_bot = []
+    for symbol in hold_list_bot:
+        symbol = symbol.strip()
+        check_sell_result = check_sell(symbol)
+        if check_sell_result:
+            list_symbol_sell_bot.append(symbol)
+    # print(list_stock)
+    send_message_tele('Danh sach ma BOT dang cam: \n' + '\n'.join(hold_list_bot) +
+                     f'\n Danh sach khuyen nghi ban ({len(list_symbol_sell_bot)}): \n' + '\n'.join(list_symbol_sell_bot))
 
