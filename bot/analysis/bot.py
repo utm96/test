@@ -67,7 +67,7 @@ def check_week(symbol):
 
     if symbol_data is None:
         return False
-    ma20 = calculate_ma(symbol_data['close'], 20)
+    ma20 = calculate_ma(symbol_data['close'], 50)
     if(ma20[-1] <= symbol_data['close'].iloc[-1] ):
         return True
     return False
