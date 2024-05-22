@@ -16,4 +16,5 @@ jobs:
         script: |
           cd /home/admin/test
           git pull
+          chmod 755 run_bot.sh
           /usr/bin/python3 /home/admin/test/bot buy
