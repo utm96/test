@@ -62,7 +62,7 @@ def squeez_on(symbol):
         
 def check_week(symbol):
     today = date.today()
-    start_days = today - timedelta(days=300)
+    start_days = today - timedelta(days=600)
     symbol_data = ohlc_data(symbol = symbol,start_date=str(start_days),end_date = str(today+ timedelta(days=1)),resolution ='W')
 
     if symbol_data is None:

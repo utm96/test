@@ -80,3 +80,40 @@ def get_list_stock (token, url):
 
     print(response)
     return response.json()
+
+
+def get_asset(token):
+    # url = "https://apiext.tcbs.com.vn/hft-krema/v1/accounts/0001698153/se"    
+    headers = {
+    'Authorization': f'Bearer {token}' 
+    }
+    payload = {}
+
+    response = requests.request("GET", "https://apiext.tcbs.com.vn/asset-hub/v2/asset/overview?reload=true&accountNo=", headers=headers, data=payload)
+
+    res_json = response.json()
+    print(res_json)
+    total_cash = res_json['assets']['cash']['totalCash'] + res_json['assets']['isave']['balance'] + res_json['assets']['isave']['interest']
+    loan_value = res_json['assets']['loan']['totalValue']
+
+    ticker_info = []
+    for index in range(2):  # Iterate over indices 0 and 1
+        ticker_info += res_json['assets']['stock']['data'][index]['tickers']
+    total_ticker_value = sum(ticker['volume'] * ticker['currentPrice'] for ticker in ticker_info)
+    total_value = total_cash + total_ticker_value
+# Calculate proportion of totalCash for each ticker
+    ticker_proportions = {}
+    ticker_proportions['Cash'] = total_cash/ total_value
+    ticker_proportions['Margin'] = loan_value / total_value
+    for ticker in ticker_info:
+        symbol = ticker['symbol']
+        current_value = ticker['volume'] * ticker['currentPrice']
+        cost_value = ticker['volume'] * ticker['costPrice']
+        proportion = current_value / total_value
+        if(symbol in ticker_proportions):
+            ticker_proportions[symbol]['proportion'] += proportion
+            ticker_proportions[symbol]['current_value'] += current_value
+            ticker_proportions[symbol]['cost_value'] += cost_value
+        else :
+            ticker_proportions[symbol] = {'current_value': current_value, 'cost_value': cost_value, 'proportion': proportion}
+    return ticker_proportions
