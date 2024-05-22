@@ -16,4 +16,4 @@ jobs:
         script: |
           cd /home/admin/test
           git pull
-          python bot buy
+          /usr/bin/python3 /home/admin/test/bot buy
