@@ -131,3 +131,28 @@ def trading_symbol(symbol):
 
 #     if(ma20_volume[-1] <= symbol_data['volume'].iloc[-1] ):
     # return ma200[-1] < ma100[-1] < ma50[-1] < ma20[-1] and current_price > ma50[-1]
+
+
+def check_poc(symbol):
+    # money_flow = []
+    today = date.today()
+    sixty_days_ago = today - timedelta(days=365)
+    symbol_data = ohlc_data(symbol = symbol,start_date=str(sixty_days_ago),end_date = str(today+ timedelta(days=1)),resolution ='D')
+    if symbol_data is None:
+        return False
+    num_bars = 150
+
+# Define the price levels
+    price_levels = pd.cut(symbol_data['close'], bins=num_bars, labels=False)
+    vol_profile = symbol_data.groupby(price_levels)['volume'].sum()
+    poc_level = vol_profile.idxmax()
+    poc_price = symbol_data['close'].min() + (symbol_data['close'].max() - symbol_data['close'].min()) * poc_level / num_bars
+    current_price = symbol_data['close'].iloc[-1]
+    return current_price < poc_price * 1.04 
+#     for i in range(-1,-value_range,-1):
+#         record = symbol_data.iloc[i]
+# #         print(record)
+#         if(check_candle_buy(record) and record['volume'] > 3 * vol_ma[i] and record['volume'] * record['low'] > 1000000000* 3):
+#             money_flow.append(record)
+#     return money_flow
+

@@ -72,7 +72,7 @@ def check_buy_bot(beautify_list_rated_symbol,list_symbol_string):
             is_strong = check_strong_stock(symbol)
             if is_strong :
                 list_symbol_strong.append(symbol)
-            elif trading_symbol(symbol):
+            elif trading_symbol(symbol) or check_poc(symbol):
                 list_symbol_trading.append(symbol)
         except:
             pass
