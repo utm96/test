@@ -140,7 +140,7 @@ def check_poc(symbol):
     symbol_data = ohlc_data(symbol = symbol,start_date=str(sixty_days_ago),end_date = str(today+ timedelta(days=1)),resolution ='D')
     if symbol_data is None:
         return False
-    num_bars = 150
+    num_bars = 200
 
 # Define the price levels
     price_levels = pd.cut(symbol_data['close'], bins=num_bars, labels=False)

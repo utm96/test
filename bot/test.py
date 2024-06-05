@@ -6,5 +6,5 @@ from common.helper import read_config
 from collections import defaultdict 
 
 
-check_poc('DBC')
+check_poc('TNG')
 
