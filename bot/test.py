@@ -6,5 +6,8 @@ from common.helper import read_config
 from collections import defaultdict 
 
 
-check_poc('TNG')
+# calcul_command_price(init_price=31.25,init_vol=25,number_loop=14, step = 0.05, step_vol = 1pp)
 
+
+rsi = check_poc('MSB')
+print(rsi)

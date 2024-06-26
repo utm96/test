@@ -139,6 +139,27 @@ def trading_symbol(symbol):
 #     if(ma20_volume[-1] <= symbol_data['volume'].iloc[-1] ):
     # return ma200[-1] < ma100[-1] < ma50[-1] < ma20[-1] and current_price > ma50[-1]
 
+def rsi(symbol = 'VHC',period=14 , symbol_data = None):
+    if symbol_data is None:
+        today = date.today()
+        sixty_days_ago = today - timedelta(days=60)
+        symbol_data = ohlc_data(symbol = symbol,start_date=str(sixty_days_ago),end_date = str(today + timedelta(days=1)),resolution ='D')
+    change = symbol_data['close'].diff(1)
+
+    # Separate gains and losses
+    gain = change.where(change > 0, 0.0)
+    loss = change.where(change < 0, 0.0).abs()
+
+    # Calculate the Exponential Moving Average (EMA) for gains and losses
+    avg_gain = gain.ewm(alpha=1/period, min_periods=period, adjust=False).mean()
+    avg_loss = loss.ewm(alpha=1/period, min_periods=period, adjust=False).mean()
+
+    # Calculate the Relative Strength (RS)
+    rs = avg_gain / avg_loss
+
+    # Calculate the Relative Strength Index (RSI)
+    rsi = 100 - (100 / (1 + rs))
+    return rsi
 
 def check_poc(symbol):
     # money_flow = []
@@ -155,11 +176,49 @@ def check_poc(symbol):
     poc_level = vol_profile.idxmax()
     poc_price = symbol_data['close'].min() + (symbol_data['close'].max() - symbol_data['close'].min()) * poc_level / num_bars
     current_price = symbol_data['close'].iloc[-1]
-    return current_price < poc_price * 1.04 
+    print(poc_price)
+    if(current_price < poc_price * 1.04 ):
+        return True
+    rsi_values = rsi(symbol = symbol, symbol_data = symbol_data)
+    ema200 = calculate_ema(symbol_data['close'], 200)
+    current_price = symbol_data['close'].iloc[-1]
+    if(current_price > ema200[-1] and rsi_values[-1] < 45):
+        return True
+    return False
 #     for i in range(-1,-value_range,-1):
 #         record = symbol_data.iloc[i]
 # #         print(record)
 #         if(check_candle_buy(record) and record['volume'] > 3 * vol_ma[i] and record['volume'] * record['low'] > 1000000000* 3):
 #             money_flow.append(record)
 #     return money_flow
+import math
+
+def floor_to_step(num, step=0.05):
+    result = math.floor(num / step) * step
+    result = round(result, 2)
+    return result
+
+def count_occurrences(data, step=1):
+    occurrences = {}
+    for value in data:
+        if value in occurrences:
+            occurrences[value] += step
+        else:
+            occurrences[value] = step
+    return occurrences
+
+# Example usage:
+def calcul_command_price(init_vol, init_price, number_loop, step, step_vol = 1):
+    average_price  = init_price
+    current_vol = init_vol
+    values = []
+    for i in range(number_loop):
+        buy_price = 0.95 * average_price
+        current_vol += 1
+        average_price = (current_vol*average_price + buy_price*step_vol)/(current_vol + step_vol)
+        values.append(floor_to_step(buy_price,step))
+    occurrences = count_occurrences(values,step_vol)
+    print(occurrences)
+# def average_price(price_current, buy_price, current_vol):
+#     (current_vol*price_current + buy_price)/(current_vol + 1)
 
