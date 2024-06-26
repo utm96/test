@@ -144,7 +144,7 @@ def rsi(symbol = 'VHC',period=14 , symbol_data = None):
         today = date.today()
         sixty_days_ago = today - timedelta(days=60)
         symbol_data = ohlc_data(symbol = symbol,start_date=str(sixty_days_ago),end_date = str(today + timedelta(days=1)),resolution ='D')
-    change = symbol_data['close'].diff(1)
+    change = symbol_data['close'].diff()
 
     # Separate gains and losses
     gain = change.where(change > 0, 0.0)
@@ -169,20 +169,18 @@ def check_poc(symbol):
     if symbol_data is None:
         return False
     num_bars = 200
-
 # Define the price levels
     price_levels = pd.cut(symbol_data['close'], bins=num_bars, labels=False)
     vol_profile = symbol_data.groupby(price_levels)['volume'].sum()
     poc_level = vol_profile.idxmax()
     poc_price = symbol_data['close'].min() + (symbol_data['close'].max() - symbol_data['close'].min()) * poc_level / num_bars
     current_price = symbol_data['close'].iloc[-1]
-    print(poc_price)
     if(current_price < poc_price * 1.04 ):
         return True
     rsi_values = rsi(symbol = symbol, symbol_data = symbol_data)
     ema200 = calculate_ema(symbol_data['close'], 200)
     current_price = symbol_data['close'].iloc[-1]
-    if(current_price > ema200[-1] and rsi_values[-1] < 45):
+    if(current_price > ema200[-1] and rsi_values.iloc[-1] < 45):
         return True
     return False
 #     for i in range(-1,-value_range,-1):
