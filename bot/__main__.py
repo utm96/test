@@ -158,7 +158,7 @@ if __name__ == '__main__':
         # print(sys.argv)
         # print("run args")
         send_message_tele("==============Test upcode=======================")
-        list_symbol_string = 'CTR,TNG,NTL,NLG,VHM,PNJ,VHC,DIG,DPR,IDC, SZC,KBC, HCM, MSB'
+        list_symbol_string = 'CTR,TNG,NTL,NLG,VHM,PNJ,VHC,DIG,DPR,IDC,SZC,KBC,HCM,MSB'
         if(sys.argv[1] == 'account'):
             check_account(beauty_print)
         if(sys.argv[1] == 'buy'):
