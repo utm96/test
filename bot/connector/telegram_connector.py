@@ -21,5 +21,16 @@ def send_message_tele(message):
     print(bot)
     bot.send_message(str(CHAT_ID), message)
 
+def send_file_tele(file_path = 'result.csv', caption = "Result file"):
+    print("BOT_KEY: " + BOT_KEY)
+    print("BOT_KEY: " + bot_key)
+
+    print("CHAT_ID: " + CHAT_ID)
+    print("CHAT_ID: " + chat_id)
+
+    bot = telebot.TeleBot(str(BOT_KEY))
+    with open(file_path, 'rb') as file:
+        bot.send_document(CHAT_ID, file, caption=caption)
+
 
 # tele("hello")
